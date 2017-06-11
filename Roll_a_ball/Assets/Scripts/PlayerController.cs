@@ -37,7 +37,7 @@ public class PlayerController : MonoBehaviour
         if (Input.gyro.enabled)
         {
             Vector3 gravity = Input.gyro.gravity;
-            Vector3 movement = new Vector3(gravity.x, 0.0f, gravity.y);
+            Vector3 movement = new Vector3(-1*gravity.x, gravity.y, 0.0f);
 
             rb.AddForce(movement * speed);
         }
@@ -46,9 +46,9 @@ public class PlayerController : MonoBehaviour
             float moveHorizontal = Input.GetAxis("Horizontal");
             float moveVertical = Input.GetAxis("Vertical");
 
-            Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
+            Vector3 movement = new Vector3(-1*moveHorizontal, moveVertical, 0.0f);
 
-            rb.AddForce(movement * speed * 0.5f);
+            rb.AddForce(movement * speed);
         }
     }
 
