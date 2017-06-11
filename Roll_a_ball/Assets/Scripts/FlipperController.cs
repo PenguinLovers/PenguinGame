@@ -25,13 +25,39 @@ public class FlipperController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (Input.GetKeyUp(KeyCode.Space))
+
+        if (Application.platform == RuntimePlatform.Android
+          || Application.platform == RuntimePlatform.IPhonePlayer)
         {
-            b_keyUp = true;
+            if (Input.touchCount > 0)
+            {
+                Touch touch = Input.GetTouch(0);
+                if (touch.phase == TouchPhase.Began)
+                {
+                    // タッチ開始
+                    b_keyDown = true;
+                }
+                //else if (touch.phase == TouchPhase.Moved)
+                //{
+                //    // タッチ移動
+                //}
+                else if (touch.phase == TouchPhase.Ended)
+                {
+                    // タッチ終了
+                    b_keyUp = true;
+                }
+            }
         }
-        if(Input.GetKeyDown(KeyCode.Space))
+        else
         {
-            b_keyDown = true;
+            if (Input.GetKeyUp(KeyCode.Space))
+            {
+                b_keyUp = true;
+            }
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                b_keyDown = true;
+            }
         }
 	}
 
