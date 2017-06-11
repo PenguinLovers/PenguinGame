@@ -32,32 +32,32 @@ public class DiceController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         Vector3 check_1 = transform.TransformDirection(Vector3.forward);
-        Vector3 check_5 = transform.TransformDirection(Vector3.right);
-        Vector3 check_4 = transform.TransformDirection(Vector3.left);
+        Vector3 check_3 = transform.TransformDirection(Vector3.right);
+        Vector3 check_2 = transform.TransformDirection(Vector3.up);
         int result = 0;
 
         if (Mathf.Abs(Mathf.Round(check_1.y)) != 1)
         {
-            if (Mathf.Abs(Mathf.Round(check_4.y)) != 1)
+            if (Mathf.Abs(Mathf.Round(check_2.y)) != 1)
             {
-                if (Mathf.Round(check_5.y) == 1)
+                if (Mathf.Round(check_3.y) == 1)
                 {
-                    result = 5;
+                    result = 3;
                 }
                 else
                 {
-                    result = 2;
+                     result = 4;
                 }
             }
             else
             {
-                if (Mathf.Round(check_4.y) == 1)
+                if (Mathf.Round(check_2.y) == 1)
                 {
-                    result = 4;
+                    result = 2;
                 }
                 else
                 {
-                    result = 3;
+                    result = 5;
                 }
             }
         }
