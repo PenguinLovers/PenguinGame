@@ -11,25 +11,43 @@ public class FlipperController : MonoBehaviour {
 
     private HingeJoint hj;
     private Rigidbody rb;
+    public bool b_keyDown;
+    public bool b_keyUp;
 
 	// Use this for initialization
 	void Start () {
+        b_keyDown = false;
+        b_keyUp = false;
         hj = gameObject.GetComponent<HingeJoint>();
         rb = gameObject.GetComponent<Rigidbody>();
         openFlipper();
 	}
 	
 	// Update is called once per frame
-	void FixedUpdate () {
+	void Update () {
         if (Input.GetKeyUp(KeyCode.Space))
         {
-            openFlipper();
+            b_keyUp = true;
         }
         if(Input.GetKeyDown(KeyCode.Space))
         {
-            closeFlipper();
+            b_keyDown = true;
         }
 	}
+
+    void FixedUpdate()
+    {
+        if (b_keyUp)
+        {
+            openFlipper();
+            b_keyUp = false;
+        }
+        if (b_keyDown)
+        {
+            closeFlipper();
+            b_keyDown = false;
+        }
+    }
 
     public void openFlipper()
     {
