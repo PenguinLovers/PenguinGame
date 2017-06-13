@@ -118,8 +118,11 @@ public class DiceController : MonoBehaviour {
         Vector3 v = new Vector3(directionX, 0.0f, directionZ) - dice.transform.position;
         v.y = vy / power; // yはあとで*powerするので固定値になる
 
-        // 力を加える位置
-        Vector3 forcePosition = dice.transform.position - new Vector3(0.5f, 0.0f, -0.5f);
+        // 力を加える位置(ダイスが1辺1mっぽいので、内部の球の半径は0.5)
+        float forceRandX = Random.Range(-0.5f, 0.5f);
+        float forceRandY = Random.Range(-0.5f, 0.5f);
+        float forceRandZ = Random.Range(-0.5f, 0.5f);
+        Vector3 forcePosition = dice.transform.position + new Vector3(forceRandX, forceRandY, forceRandZ);
 
         dice.AddForceAtPosition(v * power, forcePosition);
     }
