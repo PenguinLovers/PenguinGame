@@ -14,10 +14,16 @@ public class DiceController : MonoBehaviour {
 
     private bool b_keyUp;
 
+    // 振り直し用
+    private Vector3 dicePos;
+    private Quaternion diceRot;
+
     // Use this for initialization
     void Start () {
         DiceText.text = "Dice: X";
         dice = GetComponent<Rigidbody>();
+        dicePos = dice.transform.position;
+        diceRot = dice.transform.rotation;
         DiceRoll();
     }
 	
@@ -106,15 +112,17 @@ public class DiceController : MonoBehaviour {
 
     void InitDicePosition()
     {
-        dice.transform.position = new Vector3(6.0f, 6.0f, 6.0f);
-        dice.transform.rotation = Quaternion.Euler(-55.0f, 108.0f, -135.0f);
+        dice.transform.position = dicePos;// new Vector3(6.0f, 6.0f, 6.0f);
+        dice.transform.rotation = diceRot;// Quaternion.Euler(-55.0f, 108.0f, -135.0f);
     }
 
     void DiceRoll()
     {
-        // 原点から-5～5ずらした位置に向かって投げる
-        float directionX = Random.Range(-5.0f, 5.0f);
-        float directionZ = Random.Range(-5.0f, 5.0f);
+        // 原点から少しずらした位置に向かって投げる
+        float dx = dice.transform.position.x / 2.0f;
+        float dz = dice.transform.position.z / 2.0f;
+        float directionX = Random.Range(-Mathf.Abs(dx), Mathf.Abs(dx));
+        float directionZ = Random.Range(-Mathf.Abs(dz), Mathf.Abs(dz));
         Vector3 v = new Vector3(directionX, 0.0f, directionZ) - dice.transform.position;
         v.y = vy / power; // yはあとで*powerするので固定値になる
 
