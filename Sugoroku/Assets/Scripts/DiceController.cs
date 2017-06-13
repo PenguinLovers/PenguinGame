@@ -118,11 +118,20 @@ public class DiceController : MonoBehaviour {
         Vector3 v = new Vector3(directionX, 0.0f, directionZ) - dice.transform.position;
         v.y = vy / power; // yはあとで*powerするので固定値になる
 
-        // 力を加える位置(ダイスが1辺1mっぽいので、内部の球の半径は0.5)
-        float forceRandX = Random.Range(-0.5f, 0.5f);
-        float forceRandY = Random.Range(-0.5f, 0.5f);
-        float forceRandZ = Random.Range(-0.5f, 0.5f);
-        Vector3 forcePosition = dice.transform.position + new Vector3(forceRandX, forceRandY, forceRandZ);
+        // 力を加える位置(トップスピンになるように)
+        Vector3 forcePosition;
+
+        float radius = 0.5f;    // ダイスが1辺1mっぽいので、内部の球の半径は0.5
+        float sqrExcludeRadius = dice.transform.position.sqrMagnitude + radius * radius;    // 原点中心の大きな球の半径の2乗を求める
+
+        // 大きな球の範囲外かつダイス内の球の範囲内の点が出るまで繰り返す
+        do
+        {
+            float forceRandX = Random.Range(-radius, radius);
+            float forceRandY = Random.Range(-radius, radius);
+            float forceRandZ = Random.Range(-radius, radius);
+            forcePosition = dice.transform.position + new Vector3(forceRandX, forceRandY, forceRandZ);
+        } while (sqrExcludeRadius > forcePosition.sqrMagnitude);
 
         dice.AddForceAtPosition(v * power, forcePosition);
     }
