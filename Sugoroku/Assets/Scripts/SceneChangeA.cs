@@ -9,12 +9,10 @@ public class SceneChangeA : MonoBehaviour {
 	void Start () {
 		
 	}
-	
-	// Update is called once per frame
-	void Update () {
-        if (Input.GetButton("Fire1"))   // 左Ctrl or 左クリック
-        {
-            SceneManager.LoadScene("BallScene");
-        }
+
+    // Update is called once per frame
+    public void ButtonPush()
+    {
+        SceneManager.LoadScene("BallScene");
     }
 }

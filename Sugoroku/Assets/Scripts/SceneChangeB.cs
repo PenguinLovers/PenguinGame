@@ -12,6 +12,6 @@ public class SceneChangeB : MonoBehaviour {
 	
 	// Update is called once per frame
 	public void ButtonPush () {
-        SceneManager.LoadScene("SugorokuMain");
+        SceneManager.LoadScene("BoardScene");
     }
 }

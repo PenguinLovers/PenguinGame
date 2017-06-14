@@ -6,5 +6,11 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/_Scenes/BoardScene.unity
+    guid: 6f29dd5c19eab6b45b9c7c113e6d8f55
+  - enabled: 1
     path: Assets/_Scenes/SugorokuMain.unity
-    guid: 00000000000000000000000000000000
+    guid: 40d054ef3e722e8449a2126dd21a5fac
+  - enabled: 1
+    path: Assets/_Scenes/BallScene.unity
+    guid: 845e756cc67423142bb799d7df9705c6
