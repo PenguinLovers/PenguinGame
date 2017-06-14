@@ -4,13 +4,15 @@ using UnityEngine;
 
 public class CharacterController : MonoBehaviour {
     private int nowMass = 0;
-    GameObject nowMassObj;
-    GameObject childMassObj;
+    private GameObject nowMassObj;
+    private GameObject childMassObj;
 
-    Rigidbody character;
+    private Rigidbody character;
 
     private bool b_keyUp = false;
     private bool isMoving = false;
+    private bool enableMoving = false;
+    private int moveCount = 0;
 
     // Use this for initialization
     void Start () {
@@ -23,11 +25,16 @@ public class CharacterController : MonoBehaviour {
         {
             b_keyUp = true;
         }
-    }
 
+        if (GameManager.GetInstance().GetCurrentState() == GameState.CharaMove)
+        {
+            moveCount = GetDiceScore();
+        }
+    }
+ 
     void FixedUpdate()
     {
-        if(!isMoving && b_keyUp)
+        if(!isMoving && moveCount > 0)//b_keyUp)
         {
             StartCoroutine("GoToNext");
             isMoving = true;
@@ -35,7 +42,7 @@ public class CharacterController : MonoBehaviour {
         }
     }
 
-    IEnumerator GoToNext()
+    private IEnumerator GoToNext()
     {
         if (nowMassObj == null || childMassObj == null)
         {
@@ -58,11 +65,14 @@ public class CharacterController : MonoBehaviour {
         UpdateNowMass();
         GetMassInfo();
         isMoving = false;
+        --moveCount;
+        Debug.Log("moveCount:" + moveCount);
+        GameManager.GetInstance().SetCurrentState(GameState.DiceWait);  // ダイス投げ待ち状態へ
 
         StopCoroutine("GoToNext");
     }
 
-    void GetMassInfo()
+    private void GetMassInfo()
     {
         // 現在のマスを取得
         string massName = "Mass" + nowMass;
@@ -75,9 +85,14 @@ public class CharacterController : MonoBehaviour {
         childMassObj = GameObject.Find(destMassName);
     }
 
-    void UpdateNowMass()
+    private void UpdateNowMass()
     {
         MassController mc = nowMassObj.GetComponent<MassController>();
         nowMass = mc.GetChild();
+    }
+
+    private int GetDiceScore()
+    {
+        return BoardDiceController.diceScore;
     }
 }
