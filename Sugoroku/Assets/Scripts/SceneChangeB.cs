@@ -11,10 +11,7 @@ public class SceneChangeB : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
-        if (Input.GetButton("Fire1"))   // 左Ctrl or 左クリック
-        {
-            SceneManager.LoadScene("SugorokuMain");
-        }
+	public void ButtonPush () {
+        SceneManager.LoadScene("SugorokuMain");
     }
 }
