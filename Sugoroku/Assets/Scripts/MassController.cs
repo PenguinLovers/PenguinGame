@@ -5,19 +5,26 @@ using UnityEngine;
 public class MassController : MonoBehaviour {
     [SerializeField]
     private int childMass;
+
     //取得用関数
     public int GetChild()
     {
         return childMass;
     }
 
-    // Use this for initialization
-    void Start () {
-
+    public void SetChild(int childId)
+    {
+        childMass = childId;
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Use this for initialization
+    void Start()
+    {
+    }
+
+
+// Update is called once per frame
+    void Update () {
 		
 	}
 }

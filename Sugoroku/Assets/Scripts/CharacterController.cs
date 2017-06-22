@@ -14,9 +14,23 @@ public class CharacterController : MonoBehaviour {
     private bool enableMoving = false;
     private int moveCount = 0;
 
+    public GameObject prefab;
+    public int numberOfObjects = 20;
+    public float radius = 5f;
+
     // Use this for initialization
-    void Start () {
+    void Start()
+    {
         character = GetComponent<Rigidbody>();
+        for (int i = 0; i < numberOfObjects; i++)
+        {
+            float angle = i * Mathf.PI * 2 / numberOfObjects;
+            Vector3 pos = new Vector3(Mathf.Cos(angle), 0, Mathf.Sin(angle)) * radius;
+            GameObject tmpObject = Instantiate(prefab, pos, Quaternion.identity);
+            tmpObject.name = "Mass"+i;
+            MassController tmpMC = tmpObject.GetComponent<MassController>();
+            tmpMC.SetChild( (i == numberOfObjects-1)? 0 : i + 1);
+        }
     }
 
     // Update is called once per frame
@@ -53,6 +67,8 @@ public class CharacterController : MonoBehaviour {
         Vector3 dest = childMassObj.transform.position;
         Debug.Log(character.transform.position + "," + dest);
         dest.y = character.transform.position.y;    // キャラクターの高さは変えない
+
+        character.transform.LookAt(dest);
 
         while ( Mathf.Abs(character.transform.position.x - dest.x) > 0.05f
             || Mathf.Abs(character.transform.position.z - dest.z) > 0.05f)
