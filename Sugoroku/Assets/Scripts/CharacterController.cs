@@ -20,6 +20,14 @@ public class CharacterController : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
+        // マスの生成が終わってないとキャラの初期配置ができないので仕方なくここへ。
+        // マップ生成→キャラの初期配置の順序がしっかりすればステータス無視でStartに移せる。
+        if (GameManager.GetInstance().GetCurrentState() == GameState.CharaInit)
+        {
+            InitPosition();
+            // キャラの初期位置設定が終わってからダイス振り待ちへ
+            GameManager.GetInstance().SetCurrentState(GameState.DiceWait);
+        }
         if (GameManager.GetInstance().GetCurrentState() == GameState.CharaMove)
         {
             if (moveCount == 0)
@@ -90,6 +98,27 @@ public class CharacterController : MonoBehaviour {
     {
         MassController mc = nowMassObj.GetComponent<MassController>();
         nowMass = mc.GetChild();
+    }
+
+    private void InitPosition()
+    {
+        // 初期マスの情報取得
+        nowMass = 0;
+        GetMassInfo();
+
+        // 初期マスにキャラを置く
+        Vector3 dest = nowMassObj.transform.position;
+        Debug.Log(character.transform.position + "," + dest);
+        dest.y = character.transform.position.y;    // キャラクターの高さは変えない
+        character.transform.position = dest;
+
+        // 次のマスの位置
+        dest = childMassObj.transform.position;
+        Debug.Log(character.transform.position + "," + dest);
+        dest.y = character.transform.position.y;    // キャラクターの高さは変えない
+
+        // 次のマスの方向へ向く
+        character.transform.LookAt(dest);
     }
 
     private int GetDiceScore()

@@ -4,6 +4,8 @@ using UnityEngine;
 
 public enum GameState
 {
+    CreateMap,
+    CharaInit,
     DiceWait,
     Dice,
     CharaMove,

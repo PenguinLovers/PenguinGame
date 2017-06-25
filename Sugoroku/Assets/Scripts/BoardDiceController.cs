@@ -14,6 +14,7 @@ public class BoardDiceController : MonoBehaviour
     public GameObject character;
     private Vector3 offset;
 
+
     private Rigidbody dice;
 
     private bool b_keyUp;
@@ -31,7 +32,6 @@ public class BoardDiceController : MonoBehaviour
         dice = GetComponent<Rigidbody>();
         dicePos = dice.transform.position;
         diceRot = dice.transform.rotation;
-        GameManager.GetInstance().SetCurrentState(GameState.DiceWait);
     }
 
     // Update is called once per frame

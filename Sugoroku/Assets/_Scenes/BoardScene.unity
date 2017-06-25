@@ -446,6 +446,7 @@ MonoBehaviour:
   power: 20
   vy: 500
   DiceText: {fileID: 325100647}
+  mapCreatorRef: {fileID: 1923079699}
   character: {fileID: 1390356557}
 --- !u!64 &1168563030
 MeshCollider:
@@ -788,7 +789,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 400000, guid: 1a1e97cf460dd3e4681b726a6d69bac5, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 1a1e97cf460dd3e4681b726a6d69bac5, type: 3}
       propertyPath: m_LocalPosition.y
@@ -925,7 +926,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1873620320}
   m_LocalRotation: {x: 0.2588191, y: 0, z: 0, w: 0.9659258}
-  m_LocalPosition: {x: 5, y: 3, z: -5}
+  m_LocalPosition: {x: 0, y: 3, z: -5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
