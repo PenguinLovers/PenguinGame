@@ -11,6 +11,8 @@ public class BoardDiceController : MonoBehaviour
     public Text DiceText;
     static public int diceScore = 0;
 
+    public GameObject mapCreatorRef; // 仮。場所は考える必要あり。
+
     public GameObject character;
     private Vector3 offset;
 
@@ -58,6 +60,19 @@ public class BoardDiceController : MonoBehaviour
                 if (Input.GetKeyUp(KeyCode.Space))
                 {
                     b_keyUp = true;
+                }
+                // 以下else if本当はここ(BoardDiceController)でやるべきではない。マップ切り替えなので適切なとこに移動させる。
+                else if (Input.GetKeyUp(KeyCode.Return))
+                {
+                    MapCreator mapCreator = mapCreatorRef.GetComponent<MapCreator>();
+                    if (mapCreator.GetType() == MapType.Straight)
+                    {
+                        mapCreator.ChangeMap(MapType.Circle);
+                    }
+                    else if (mapCreator.GetType() == MapType.Circle)
+                    {
+                        mapCreator.ChangeMap(MapType.Straight);
+                    }
                 }
             }
         }

@@ -9,41 +9,67 @@ public enum MapType
     // あとあと南極とかそれ以外を追加
 }
 
+public enum MapStep
+{
+    None,
+    Create,
+    Destroy,
+}
+
 public class MapCreator : MonoBehaviour {
 
     public GameObject prefab;
     public int numberOfObjects = 20;
     public float radius = 5f;
     private MapType mapType = MapType.Circle;
-
+    private MapStep mapStep = MapStep.None;
+    private bool isMapChange = false;
     // Use this for initialization
     void Start () {
-        CreateMap();
+        mapStep = MapStep.Create;
     }
 
     // Update is called once per frame
     void Update () {
-		
-	}
+        MapStep nextStep = mapStep;
+		switch(mapStep)
+        {
+            case MapStep.Create:
+                nextStep = CreateMap();
+                break;
+            case MapStep.Destroy:
+                nextStep = DestroyMap();
+                break;
+            default: break;
+        }
+        mapStep = nextStep;
+    }
+
+    public MapType GetType()
+    {
+        return mapType;
+    }
 
     // 外部からマップ変更
     public void ChangeMap(MapType type)
     {
         mapType = type;
-        DestroyMap();
-        CreateMap();
+        isMapChange = true;
+        mapStep = MapStep.Destroy;
     }
 
-    private void DestroyMap()
+    private MapStep DestroyMap()
     {
-        // マスの名前から削除？
-        //for (int i = 0; i < numberOfObjects; i++)
-        //{
-        //    Destroy(MassObject[i], .0f);
-        //}
+        GameManager.GetInstance().SetCurrentState(GameState.DestroyMap);
+        var clones = GameObject.FindGameObjectsWithTag("Mass");
+        foreach (var clone in clones)
+        {
+            Destroy(clone);
+        }
+        return isMapChange ? MapStep.Create : MapStep.None;
     }
 
-    private void CreateMap()
+    private MapStep CreateMap()
     {
         GameManager.GetInstance().SetCurrentState(GameState.CreateMap);
         switch (mapType)
@@ -73,6 +99,9 @@ public class MapCreator : MonoBehaviour {
         }
         // キャラの初期位置設定へ
         GameManager.GetInstance().SetCurrentState(GameState.CharaInit);
+        isMapChange = false;
+
+        return MapStep.None;
     }
 
 }
