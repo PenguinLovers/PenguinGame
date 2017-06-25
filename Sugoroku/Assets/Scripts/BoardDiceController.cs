@@ -18,8 +18,7 @@ public class BoardDiceController : MonoBehaviour
 
     private bool b_keyUp;
     private bool isStart; // 振り始めたか
-    private bool isEnd; // 出目が確定したか
-
+    
     // 振り直し用
     private Vector3 dicePos;
     private Quaternion diceRot;
@@ -32,45 +31,43 @@ public class BoardDiceController : MonoBehaviour
         dice = GetComponent<Rigidbody>();
         dicePos = dice.transform.position;
         diceRot = dice.transform.rotation;
-        InitDicePosition();
-        DiceRoll();
+        GameManager.GetInstance().SetCurrentState(GameState.DiceWait);
     }
 
     // Update is called once per frame
     void Update()
     {
-        // ダイスが止まっている状態
-        if (dice.velocity.magnitude == 0.0f)
+        // ダイス投げ待ち
+        if (GameManager.GetInstance().GetCurrentState() == GameState.DiceWait)
         {
-            // ダイス投げ待ち
-            if (GameManager.GetInstance().GetCurrentState() == GameState.DiceWait)
+            if (Application.platform == RuntimePlatform.Android
+                || Application.platform == RuntimePlatform.IPhonePlayer)
             {
-                if (Application.platform == RuntimePlatform.Android
-                  || Application.platform == RuntimePlatform.IPhonePlayer)
+                if (Input.touchCount > 0)
                 {
-                    if (Input.touchCount > 0)
+                    Touch touch = Input.GetTouch(0);
+                    if (touch.phase == TouchPhase.Ended)
                     {
-                        Touch touch = Input.GetTouch(0);
-                        if (touch.phase == TouchPhase.Ended)
-                        {
-                            // タッチ終了
-                            b_keyUp = true;
-                        }
-                    }
-                }
-                else
-                {
-                    if (Input.GetKeyUp(KeyCode.Space))
-                    {
+                        // タッチ終了
                         b_keyUp = true;
                     }
                 }
             }
+            else
+            {
+                if (Input.GetKeyUp(KeyCode.Space))
+                {
+                    b_keyUp = true;
+                }
+            }
+        }
 
+        // ダイスが止まっている状態
+        if (dice.velocity.magnitude == 0.0f)
+        {
             if (isStart)
             {
                 // 振り終わって出目確定までいった
-                isEnd = true;
                 if (GameManager.GetInstance().GetCurrentState() == GameState.Dice)
                 {
                     GameManager.GetInstance().SetCurrentState(GameState.CharaMove);
@@ -104,13 +101,14 @@ public class BoardDiceController : MonoBehaviour
     private void InitDicePosition()
     {
         isStart = false;
-        isEnd = false;
         dice.transform.position = dicePos;
         dice.transform.rotation = diceRot;
     }
 
     private void DiceRoll()
     {
+        dice.velocity = new Vector3(0.0f, 0.0f, 0.0f);  // サイコロに重力がかかってる状態なのでリセットしておく
+
         isStart = true;
         GameManager.GetInstance().SetCurrentState(GameState.Dice);
 

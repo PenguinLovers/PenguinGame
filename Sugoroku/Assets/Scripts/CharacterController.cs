@@ -9,53 +9,36 @@ public class CharacterController : MonoBehaviour {
 
     private Rigidbody character;
 
-    private bool b_keyUp = false;
     private bool isMoving = false;
-    private bool enableMoving = false;
     private int moveCount = 0;
-
-    public GameObject prefab;
-    public int numberOfObjects = 20;
-    public float radius = 5f;
 
     // Use this for initialization
     void Start()
     {
         character = GetComponent<Rigidbody>();
-        for (int i = 0; i < numberOfObjects; i++)
-        {
-            float angle = i * Mathf.PI * 2 / numberOfObjects;
-            Vector3 pos = new Vector3(Mathf.Cos(angle), 0, Mathf.Sin(angle)) * radius;
-            GameObject tmpObject = Instantiate(prefab, pos, Quaternion.identity);
-            tmpObject.name = "Mass"+i;
-            MassController tmpMC = tmpObject.GetComponent<MassController>();
-            tmpMC.SetChild( (i == numberOfObjects-1)? 0 : i + 1);
-        }
     }
 
     // Update is called once per frame
     void Update () {
-        if (Input.GetKeyUp(KeyCode.Space))
-        {
-            b_keyUp = true;
-        }
-
         if (GameManager.GetInstance().GetCurrentState() == GameState.CharaMove)
         {
-            moveCount = GetDiceScore();
+            if (moveCount == 0)
+            {
+                moveCount = GetDiceScore();
+            }
         }
     }
  
     void FixedUpdate()
     {
-        if(!isMoving && moveCount > 0)//b_keyUp)
+        if(!isMoving && moveCount > 0)
         {
             StartCoroutine("GoToNext");
             isMoving = true;
-            b_keyUp = false;
         }
     }
 
+    // 1マスずつ進める処理
     private IEnumerator GoToNext()
     {
         if (nowMassObj == null || childMassObj == null)
@@ -77,14 +60,16 @@ public class CharacterController : MonoBehaviour {
             yield return null;
         }
 
-        // 目的地に到着したと思うのでマスの情報を取得しなおしておく
+        // 目的地(1マス先)に到着したと思うのでマスの情報を取得しなおしておく
         UpdateNowMass();
         GetMassInfo();
         isMoving = false;
         --moveCount;
         Debug.Log("moveCount:" + moveCount);
-        GameManager.GetInstance().SetCurrentState(GameState.DiceWait);  // ダイス投げ待ち状態へ
-
+        if (moveCount == 0)
+        {
+            GameManager.GetInstance().SetCurrentState(GameState.DiceWait);  // ダイス投げ待ち状態へ
+        }
         StopCoroutine("GoToNext");
     }
 
