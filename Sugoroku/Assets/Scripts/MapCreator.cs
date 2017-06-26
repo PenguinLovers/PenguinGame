@@ -83,7 +83,10 @@ public class MapCreator : MonoBehaviour {
                     GameObject tmpObject = Instantiate(prefab, pos, Quaternion.identity);
                     tmpObject.name = "Mass" + i;    // CharacterControllerから取得できるようにリネーム
                     MassController tmpMC = tmpObject.GetComponent<MassController>();
+                    tmpMC.SetParent((i == 0) ? numberOfObjects - 1 : i - 1);
                     tmpMC.SetChild((i == numberOfObjects - 1) ? 0 : i + 1);
+                    tmpMC.SetMassEvent(MassEvent.None);
+                    //tmpMC.SetMassEvent((i%2==0) ? MassEvent.Ahead : MassEvent.Back);
                 }
                 break;
             case MapType.Straight:
@@ -93,7 +96,10 @@ public class MapCreator : MonoBehaviour {
                     GameObject tmpObject = Instantiate(prefab, pos, Quaternion.identity);
                     tmpObject.name = "Mass" + i;    // CharacterControllerから取得できるようにリネーム
                     MassController tmpMC = tmpObject.GetComponent<MassController>();
+                    tmpMC.SetParent((i == 0) ? numberOfObjects - 1 : i - 1);
                     tmpMC.SetChild((i == numberOfObjects - 1) ? 0 : i + 1);
+                    tmpMC.SetMassEvent(MassEvent.None);
+                    //tmpMC.SetMassEvent((i%2==0) ? MassEvent.Ahead : MassEvent.Back);
                 }
                 break;
         }

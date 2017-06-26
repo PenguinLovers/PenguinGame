@@ -10,6 +10,7 @@ public enum GameState
     DiceWait,
     Dice,
     CharaMove,
+    MassEvent,
 }
 
 public class GameManager : MonoBehaviour {
@@ -18,11 +19,13 @@ public class GameManager : MonoBehaviour {
 
     // 現在の状態
     private GameState currentGameState;
+    private GameState prevGameState;
 
     void Awake()
     {
         s_Instance = this;
-        SetCurrentState(GameState.Dice);
+        SetPrevState(GameState.CreateMap);
+        SetCurrentState(GameState.CreateMap);
     }
 
     static public GameManager GetInstance()
@@ -33,11 +36,22 @@ public class GameManager : MonoBehaviour {
     // 外からこのメソッドを使って状態を変更
     public void SetCurrentState(GameState state)
     {
+        SetPrevState(currentGameState);
         currentGameState = state;
     }
 
     public GameState GetCurrentState()
     {
         return currentGameState;
+    }
+
+    private void SetPrevState(GameState state)
+    {
+        prevGameState = state;
+    }
+
+    public GameState GetPrevState()
+    {
+        return prevGameState;
     }
 }
